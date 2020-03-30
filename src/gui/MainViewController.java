@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.DepartmentService;
 
 public class MainViewController implements Initializable {
 
@@ -34,7 +35,7 @@ public class MainViewController implements Initializable {
 	@FXML
 	public void onMenuItemDepartmentActive() {
 
-		loadView("/gui/DepartmentList.fxml");
+		loadView2("/gui/DepartmentList.fxml");
 	}
 
 	@FXML
@@ -75,6 +76,43 @@ public class MainViewController implements Initializable {
 			mainVbox.getChildren().clear(); // Apaga os filhos
 			mainVbox.getChildren().add(mainMenu); // Adiciona o menu Preservado
 			mainVbox.getChildren().addAll(newVbox.getChildren()); // Adiciona os novos fihos do VBox About
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IOException", "Error load View", e.getMessage(), AlertType.ERROR);
+
+		}
+
+	}
+	
+	public synchronized void loadView2(String absoluteName) {
+
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+
+			VBox newVbox = loader.load();
+
+			// pega a sena principal da classe Main
+
+			Scene mainScene = Main.getMainScene();
+			// Pega o primeiro elemento da janela principal .
+			// ((ScrollPane) mainScene.getRoot()) faz o castepara ScrollPane primeiro
+			// elemento da pagina scena. .getContent(); pega a area conteudo
+
+			VBox mainVbox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent(); // Converte todo conteudo para VBox.
+
+			// Cria um objeto Nodo (Elemento) e pega o primeiro filho da posicao Zero.
+			Node mainMenu = mainVbox.getChildren().get(0);
+
+			mainVbox.getChildren().clear(); // Apaga os filhos
+			mainVbox.getChildren().add(mainMenu); // Adiciona o menu Preservado
+			mainVbox.getChildren().addAll(newVbox.getChildren()); // Adiciona os novos fihos do VBox About
+			
+			DepartmentListController controller = loader.getController(); // Pega o Controller do objeto Loader.
+			controller.setDepartmentService(new DepartmentService());
+			controller.updateTableView(); //mostra os dados na tableView
+			
 
 		} catch (IOException e) {
 
