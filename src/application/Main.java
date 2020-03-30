@@ -46,7 +46,7 @@ public class Main extends Application {
 	}
 	
 	//Retorna a scena Principal
-	public static Scene mainScene() {
+	public static Scene getMainScene() {
 		
 		return mainScene;
 	}

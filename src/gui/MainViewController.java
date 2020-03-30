@@ -62,7 +62,7 @@ public class MainViewController implements Initializable {
 
 			// pega a sena principal da classe Main
 
-			Scene mainScene = Main.mainScene();
+			Scene mainScene = Main.getMainScene();
 			// Pega o primeiro elemento da janela principal .
 			// ((ScrollPane) mainScene.getRoot()) faz o castepara ScrollPane primeiro
 			// elemento da pagina scena. .getContent(); pega a area conteudo
