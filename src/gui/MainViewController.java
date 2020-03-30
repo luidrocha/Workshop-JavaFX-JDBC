@@ -34,7 +34,7 @@ public class MainViewController implements Initializable {
 	@FXML
 	public void onMenuItemDepartmentActive() {
 
-		System.out.println("onMenuitemDepartmentActive");
+		loadView("/gui/DepartmentList.fxml");
 	}
 
 	@FXML
@@ -48,10 +48,11 @@ public class MainViewController implements Initializable {
 
 	}
 
-	// Syncronied garante que nao sera interrompido e gerar um comportamento inesperado
+	// Syncronied garante que nao sera interrompido e gerar um comportamento
+	// inesperado
 	// visto que as telas graficas sao mult-thred.
-	
-	public synchronized  void loadView(String absoluteName) {
+
+	public synchronized void loadView(String absoluteName) {
 
 		try {
 
