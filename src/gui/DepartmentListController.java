@@ -49,6 +49,7 @@ public class DepartmentListController implements Initializable {
 	@FXML
 	public void btNovoAction(ActionEvent event) {
 		
+				
 		Department obj = new Department();
 
 		Stage parentStage = Utils.curretStage(event);
@@ -108,11 +109,15 @@ public class DepartmentListController implements Initializable {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load(); // Carrega a view
 			
-			DepartmentFormController controller = loader.getController(); // Pega o controller da tela
+			DepartmentFormController controller = loader.getController()	; // Pega o controller da tela
 			
 			controller.setDepartment(obj);
 			
+			controller.setDepartmentService(new DepartmentService()); //intancia a Dependencia
+			
 			controller.updateFormData();
+			
+			
 			
 			
 		

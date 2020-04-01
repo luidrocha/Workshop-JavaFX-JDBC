@@ -3,17 +3,27 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javax.swing.Action;
+
+import db.DbException;
+import gui.util.Alerts;
 import gui.util.Constrants;
+import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import model.entities.Department;
+import model.services.DepartmentService;
 
 public class DepartmentFormController implements Initializable {
 
 	private Department entity;
+
+	private DepartmentService service;
 
 	@FXML
 	private TextField txtFieldId;
@@ -31,21 +41,54 @@ public class DepartmentFormController implements Initializable {
 	private Label lblMensagemErro;
 
 	@FXML
-	public void onBtSaveAction() {
+	public void onBtSaveAction(ActionEvent event) {
 
-		System.out.println(" nBtSaveAction() ");
+		if (entity == null) {
 
+			throw new IllegalStateException(" Entidade nulla !!");
+		}
+
+		if (service == null) {
+
+			throw new IllegalStateException(" Servico esta nullo ");
+		}
+
+		try {
+
+			entity = getFormData();
+			service.saveorUpdate(entity);
+			Utils.curretStage(event).close(); // Fecha a janela
+
+		} catch (DbException e) {
+
+			Alerts.showAlert("Erro ao Salvar", null, e.getMessage(), AlertType.ERROR);
+		}
+
+	}
+
+	private Department getFormData() {
+
+		Department obj = new Department();
+
+		obj.setId(Utils.parseInteger(txtFieldId.getText()));
+		obj.setName(txtFieldName.getText());
+		return obj;
 	}
 
 	@FXML
-	public void onCancelAction() {
+	public void onCancelAction(ActionEvent event) {
 
-		System.out.println(" onCancelAction() ");
+		Utils.curretStage(event).close(); // Fecha a janela
 	}
-	
+
 	public void setDepartment(Department entity) {
-		
-		this.entity=entity;
+
+		this.entity = entity;
+	}
+
+	public void setDepartmentService(DepartmentService service) {
+
+		this.service = service;
 	}
 
 	public void updateFormData() {

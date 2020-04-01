@@ -16,4 +16,21 @@ public class DepartmentService {
 
 	}
 
+	// recebe o obj, se o id estiver vazio faz uma insercao se tiver preenchido faz
+	// uma atualizacao
+	public void saveorUpdate(Department obj) {
+
+		if (obj.getId() == null) {
+
+			dao.insert(obj);
+		}
+
+		else {
+
+			dao.update(obj);
+
+		}
+
+	}
+
 }
