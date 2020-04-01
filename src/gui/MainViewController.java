@@ -35,24 +35,26 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemDepartmentActive() {
-		
-		// Segundo parametro e uma acao de inicializacao do controller foi usado expressao lambda.
 
-		loadView("/gui/DepartmentList.fxml", (DepartmentListController controller ) -> {
-			
+		// Segundo parametro e uma acao de inicializacao do controller foi usado
+		// expressao lambda.
+
+		loadView("/gui/DepartmentList.fxml", (DepartmentListController controller) -> {
+
 			controller.setDepartmentService(new DepartmentService());
 			controller.updateTableView();
-			 
-			
-		} );
-		
+
+		});
+
 	}
 
 	@FXML
 	public void onMenuItemAboutAction() {
-		
-		// pra cumprir os parametros foi passado uma expressao lambda que nao leva a nada. Nao tem elementos a ser carregadonesta tela
-		loadView("/gui/About.fxml", x -> {});
+
+		// pra cumprir os parametros foi passado uma expressao lambda que nao leva a
+		// nada. Nao tem elementos a ser carregadonesta tela
+		loadView("/gui/About.fxml", x -> {
+		});
 	}
 
 	@Override
@@ -66,8 +68,8 @@ public class MainViewController implements Initializable {
 	// visto que as telas graficas sao mult-thred.
 
 	// Cria um metodo generico
-	
-	public synchronized <T> void loadView(String absoluteName, Consumer<T> initializeAction ) {
+
+	public synchronized <T> void loadView(String absoluteName, Consumer<T> initializeAction) {
 
 		try {
 
@@ -90,8 +92,9 @@ public class MainViewController implements Initializable {
 			mainVbox.getChildren().clear(); // Apaga os filhos
 			mainVbox.getChildren().add(mainMenu); // Adiciona o menu Preservado
 			mainVbox.getChildren().addAll(newVbox.getChildren()); // Adiciona os novos fihos do VBox About
-			
-			T controller = loader.getController(); // getControle e do objeto loader, essas 2 linhas executa a funcao que passada como argumento
+
+			T controller = loader.getController(); // getControle e do objeto loader, essas 2 linhas executa a funcao
+													// que passada como argumento
 			initializeAction.accept(controller); // Inicia o consummer
 
 		} catch (IOException e) {
@@ -101,7 +104,5 @@ public class MainViewController implements Initializable {
 		}
 
 	}
-	
-	
 
 }
