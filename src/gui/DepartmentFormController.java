@@ -96,11 +96,12 @@ public class DepartmentFormController implements Initializable {
 		obj.setId(Utils.parseInteger(txtFieldId.getText()));
 
 		// Trim() Elimina espaco do inicio e do fim,
-		if (txtFieldName.getText() == null || txtFieldName.getText().trim().equals(" "))
-			;
+		if (txtFieldName.getText() == null || txtFieldName.getText().trim().equals(" ")) {
 
 		exception.addError("name", "Campo nao pode estar vazio"); // Adiciona a excecao no Map de errors.
-
+		
+		}
+		
 		obj.setName(txtFieldName.getText());
 
 		if (exception.getErrors().size() > 0) {

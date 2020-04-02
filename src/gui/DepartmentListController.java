@@ -9,6 +9,7 @@ import application.Main;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -42,6 +44,9 @@ public class DepartmentListController implements Initializable, DataChangeListen
 															// , onde integer e o tipo do campo
 
 	@FXML
+	private TableColumn<Department, Department> tableColumnEDIT;
+
+	@FXML
 	private TableColumn<Department, String> tableColumnName;
 
 	@FXML
@@ -49,13 +54,12 @@ public class DepartmentListController implements Initializable, DataChangeListen
 
 	@FXML
 	public void btNovoAction(ActionEvent event) {
-		
-				
+
 		Department obj = new Department();
 
 		Stage parentStage = Utils.curretStage(event);
 
-		createDialogForm (obj, "/gui/DepartmentForm.fxml", parentStage);
+		createDialogForm(obj, "/gui/DepartmentForm.fxml", parentStage);
 
 	}
 
@@ -72,7 +76,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 
 	}
 
-	// Carrega os Departamentos MOCK
+	// Carrega os Departamentos MOCK 
 
 	public void updateTableView() {
 
@@ -85,6 +89,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 
 		obsList = FXCollections.observableArrayList(lista); // Carrega a lista no objeto ObsList
 		tableViewDepartment.setItems(obsList); // Carrega a lista na TableViewDepartment
+		initEditButtons(); // Acrescenta a opcao Edit em cada linha da tabela
 	}
 
 	public void InicializeNode() {
@@ -109,21 +114,16 @@ public class DepartmentListController implements Initializable, DataChangeListen
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load(); // Carrega a view
-			
-			DepartmentFormController controller = loader.getController()	; // Pega o controller da tela
-			
+
+			DepartmentFormController controller = loader.getController(); // Pega o controller da tela
+
 			controller.setDepartment(obj);
-			
-			controller.setDepartmentService(new DepartmentService()); //intancia a Dependencia
-			
+
+			controller.setDepartmentService(new DepartmentService()); // intancia a Dependencia
+
 			controller.subscribeDataChangeListener(this);
-			
+
 			controller.updateFormData();
-			
-			
-			
-			
-		
 
 			Stage dialogStage = new Stage(); // Cria um novo estage para janela nova
 
@@ -149,9 +149,30 @@ public class DepartmentListController implements Initializable, DataChangeListen
 
 	@Override
 	public void onDataChanged() {
-		
+
 		updateTableView();
-		
+
+	}
+
+	// Monta os botoes do grid para Editar as informacaoes
+	
+	private void initEditButtons() {
+		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnEDIT.setCellFactory(param -> new TableCell<Department, Department>() {
+			private final Button button = new Button("edit");
+
+			@Override
+			protected void updateItem(Department obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(
+						event -> createDialogForm(obj, "/gui/DepartmentForm.fxml", Utils.curretStage(event)));
+			}
+		});
 	}
 
 }
