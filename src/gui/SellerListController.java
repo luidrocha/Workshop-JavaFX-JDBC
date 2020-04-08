@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -40,15 +41,26 @@ public class SellerListController implements Initializable, DataChangeListener {
 	@FXML
 	private TableColumn<Seller, Integer> tableColumnId; // Define um objeto do tipo TableColumn<Seller, Integer>
 														// , onde integer e o tipo do campo
-
+	@FXML
+	private TableColumn<Seller, String> tableColumnName;
+	
+	@FXML
+	private TableColumn<Seller, String> tableColumnEmail;
+	
+	@FXML
+	private TableColumn<Seller, Date> tableColumnBirthDate;
+	
+	@FXML
+	private TableColumn<Seller, Double> tableColumnBaseSalary;
+	
+	
 	@FXML
 	private TableColumn<Seller, Seller> tableColumnEDIT;
 
 	@FXML
 	private TableColumn<Seller, Seller> tableColumnREMOVE;
 
-	@FXML
-	private TableColumn<Seller, String> tableColumnName;
+	
 
 	@FXML
 	private Button btNovo;
@@ -60,7 +72,8 @@ public class SellerListController implements Initializable, DataChangeListener {
 
 		Stage parentStage = Utils.curretStage(event);
 
-		createDialogForm(obj, "/gui/SellerForm.fxml", parentStage);
+		createDialogForm(obj, "/gui/SellerList.fxml", parentStage);
+		// createDialogForm(obj, "/gui/SellerListForm.fxml", parentStage);
 
 	}
 
@@ -97,7 +110,12 @@ public class SellerListController implements Initializable, DataChangeListener {
 	public void InicializeNode() {
 
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("Id")); // Padrao do JavaFX para iniciar as colunas
-		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+		Utils.formatTableColumnDate(tableColumnBirthDate, "dd/MM/yyyy"); //Formata a data no grid.
+		tableColumnBaseSalary.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
+		Utils.formatTableColumnDouble(tableColumnBaseSalary, 2); // Formata o salario
 
 		Stage stage = (Stage) Main.getMainScene().getWindow(); // pega a referencia da Janela getWindow() e super classe
 																// do Stage por isso o DowCast
