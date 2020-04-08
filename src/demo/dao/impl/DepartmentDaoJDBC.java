@@ -12,7 +12,11 @@ import java.util.Map;
 
 import db.DB;
 import db.DbException;
+import db.DbIntegrityException;
 import demo.dao.DepartmentDao;
+import gui.util.Alerts;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import model.entities.Department;
 
 public class DepartmentDaoJDBC implements DepartmentDao {
@@ -125,8 +129,13 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 			}
 		}
 
+		catch (DbIntegrityException e) {
+
+		}
+
 		catch (SQLException e) {
-			throw new DbException(e.getMessage());
+			Alerts.showAlert("Erro ao deletar obj", null, e.getMessage(), AlertType.ERROR);
+			// throw new DbException(e.getMessage());
 
 		} finally {
 			DB.closeStatemant(st);

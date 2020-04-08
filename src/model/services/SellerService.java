@@ -3,14 +3,14 @@ package model.services;
 import java.util.List;
 
 import demo.dao.DaoFactory;
-import demo.dao.DepartmentDao;
-import model.entities.Department;
+import demo.dao.SellerDao;
+import model.entities.Seller;
 
-public class DepartmentService {
+public class SellerService {
 
-	private DepartmentDao dao = DaoFactory.createDepartmentDao();
+	private SellerDao dao = DaoFactory.createSellerDao();
 
-	public List<Department> findAll() {
+	public List<Seller> findAll() {
 
 		return dao.findAll();
 
@@ -18,7 +18,7 @@ public class DepartmentService {
 
 	// recebe o obj, se o id estiver vazio faz uma insercao se tiver preenchido faz
 	// uma atualizacao
-	public void saveorUpdate(Department obj) {
+	public void saveorUpdate(Seller obj) {
 
 		if (obj.getId() == null) {
 
@@ -33,8 +33,8 @@ public class DepartmentService {
 
 	}
 	
-	// Elimina o departmento de acordo com o Id 
-	public void remove(Department obj) {
+	// Elimina o Sellero de acordo com o Id 
+	public void remove(Seller obj) {
 		
 		dao.deleteById(obj.getId());
 	}

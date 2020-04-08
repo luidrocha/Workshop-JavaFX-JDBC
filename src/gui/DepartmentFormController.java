@@ -130,7 +130,7 @@ public class DepartmentFormController implements Initializable {
 
 	public void subscribeDataChangeListener(DataChangeListener listener) {
 
-		dataChangeListeners.add(listener); // Adicionao o
+		dataChangeListeners.add(listener); // Adicionao o obj que deseja escutar as mudancas
 	}
 
 	public void updateFormData() {
