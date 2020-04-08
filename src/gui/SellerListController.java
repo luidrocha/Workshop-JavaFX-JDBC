@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -24,6 +27,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Seller;
 import model.services.SellerService;
@@ -72,8 +77,9 @@ public class SellerListController implements Initializable, DataChangeListener {
 
 		Stage parentStage = Utils.curretStage(event);
 
-		createDialogForm(obj, "/gui/SellerList.fxml", parentStage);
-		// createDialogForm(obj, "/gui/SellerListForm.fxml", parentStage);
+		//createDialogForm(obj, "/gui/SellerList.fxml", parentStage);
+		
+		createDialogForm(obj, "/gui/SellerForm.fxml", parentStage);
 
 	}
 
@@ -130,41 +136,41 @@ public class SellerListController implements Initializable, DataChangeListener {
 
 	private void createDialogForm(Seller obj, String absoluteName, Stage parentStage) {
 
-//		try {
-//
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-//			Pane pane = loader.load(); // Carrega a view
-//
-//			SellerFormController controller = loader.getController(); // Pega o controller da tela
-//
-//			controller.setSeller(obj);
-//
-//			controller.setSellerService(new SellerService()); // intancia a Dependencia
-//
-//			controller.subscribeDataChangeListener(this);
-//
-//			controller.updateFormData();
-//
-//			Stage dialogStage = new Stage(); // Cria um novo estage para janela nova
-//
-//			dialogStage.setTitle("Entre com o Dados do Departamento");
-//
-//			dialogStage.setScene(new Scene(pane)); // Seta uma nova scene que e a view carregada
-//
-//			dialogStage.setResizable(false); // Faz com que a janela nao possa ser redimenssionada.
-//
-//			dialogStage.initOwner(parentStage); // Informa o Stage Pai dessa janela
-//
-//			dialogStage.initModality(Modality.WINDOW_MODAL); // Define a janela como MODAL.
-//			dialogStage.showAndWait();
-//
-//		}
-//
-//		catch (IOException e) {
-//
-//			Alerts.showAlert("IO Exception", "Error", e.getMessage(), AlertType.ERROR);
-//		}
-//
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load(); // Carrega a view
+
+			SellerFormController controller = loader.getController(); // Pega o controller da tela
+
+			controller.setSeller(obj);
+
+			controller.setSellerService(new SellerService()); // intancia a Dependencia
+
+			controller.subscribeDataChangeListener(this);
+
+			controller.updateFormData();
+
+			Stage dialogStage = new Stage(); // Cria um novo estage para janela nova
+
+			dialogStage.setTitle("Entre com o Dados do Departamento");
+
+			dialogStage.setScene(new Scene(pane)); // Seta uma nova scene que e a view carregada
+
+			dialogStage.setResizable(false); // Faz com que a janela nao possa ser redimenssionada.
+
+			dialogStage.initOwner(parentStage); // Informa o Stage Pai dessa janela
+
+			dialogStage.initModality(Modality.WINDOW_MODAL); // Define a janela como MODAL.
+			dialogStage.showAndWait();
+
+		}
+
+		catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Error", e.getMessage(), AlertType.ERROR);
+		}
+
 	}
 
 	@Override
