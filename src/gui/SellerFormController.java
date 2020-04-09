@@ -1,8 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -17,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.Exceptions.ValidationException;
@@ -39,6 +43,15 @@ public class SellerFormController implements Initializable {
 	private TextField txtFieldName;
 
 	@FXML
+	private TextField txtFieldEmail;
+
+	@FXML
+	private DatePicker dpBirthDate;
+
+	@FXML
+	private TextField txtFieldBaseSalay;
+
+	@FXML
 	private Button btSave;
 
 	@FXML
@@ -46,6 +59,18 @@ public class SellerFormController implements Initializable {
 
 	@FXML
 	private Label lblMensagemErro;
+
+	@FXML
+	private Label lblErrorName;
+
+	@FXML
+	private Label lblErrorEmail;
+
+	@FXML
+	private Label lblErrorBithDate;
+
+	@FXML
+	private Label lblErrorBaseSalary;
 
 	@FXML
 	public void onBtSaveAction(ActionEvent event) {
@@ -98,10 +123,10 @@ public class SellerFormController implements Initializable {
 		// Trim() Elimina espaco do inicio e do fim,
 		if (txtFieldName.getText() == null || txtFieldName.getText().trim().equals(" ")) {
 
-		exception.addError("name", "Campo nao pode estar vazio"); // Adiciona a excecao no Map de errors.
-		
+			exception.addError("name", "Campo nao pode estar vazio"); // Adiciona a excecao no Map de errors.
+
 		}
-		
+
 		obj.setName(txtFieldName.getText());
 
 		if (exception.getErrors().size() > 0) {
@@ -142,7 +167,16 @@ public class SellerFormController implements Initializable {
 		txtFieldId.setText(String.valueOf(entity.getId())); // Converte o Id numerico para texto pq o txtfield trabalha
 															// com texto
 		txtFieldName.setText(entity.getName());
+		txtFieldEmail.setText(entity.getEmail());
+		Locale.setDefault(Locale.US);
+		txtFieldBaseSalay.setText(String.format("%.2f", entity.getBaseSalary()));
 
+		// Converte a data pra data local da maquina ,ZoneId.systemDefault()) pega o
+		// formato systema
+
+		if (entity.getBirthDate() != null) {
+			dpBirthDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
+		}
 	}
 
 	private void setErrorMessage(Map<String, String> errors) {
@@ -168,7 +202,10 @@ public class SellerFormController implements Initializable {
 	private void initializableNodes() {
 
 		Constrants.setTextFieldInteger(txtFieldId);
-		Constrants.setTextFieldMaxLength(txtFieldName, 30);
+		Constrants.setTextFieldMaxLength(txtFieldName, 70);
+		Constrants.setTextFieldMaxLength(txtFieldEmail, 30);
+		Constrants.setTextFieldDouble(txtFieldBaseSalay);
+		Utils.formatDatePicker(dpBirthDate, "dd/MM/yyyy");
 
 	}
 
