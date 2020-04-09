@@ -222,7 +222,8 @@ public class DepartmentListController implements Initializable, DataChangeListen
 			}
 
 			catch (DbIntegrityException e) {
-
+				
+				e.printStackTrace();
 				Alerts.showAlert("Erro ao deletar obj", null, e.getMessage(), AlertType.ERROR);
 			}
 

@@ -31,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Seller;
+import model.services.DepartmentService;
 import model.services.SellerService;
 
 public class SellerListController implements Initializable, DataChangeListener {
@@ -145,7 +146,9 @@ public class SellerListController implements Initializable, DataChangeListener {
 
 			controller.setSeller(obj);
 
-			controller.setSellerService(new SellerService()); // intancia a Dependencia
+			controller.setServices(new SellerService(),new DepartmentService()); // intancia a Dependencia
+			
+			controller.loadAssociatedObjects(); // Estarta o metodo pra carregar a comboBox
 
 			controller.subscribeDataChangeListener(this);
 
@@ -167,6 +170,8 @@ public class SellerListController implements Initializable, DataChangeListener {
 		}
 
 		catch (IOException e) {
+			
+			e.printStackTrace();
 
 			Alerts.showAlert("IO Exception", "Error", e.getMessage(), AlertType.ERROR);
 		}
