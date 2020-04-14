@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -72,8 +75,8 @@ public class SellerFormController implements Initializable {
 
 	private ObservableList<Department> obsList;
 
-	@FXML
-	private Label lblMensagemErro;
+	// @FXML
+	// private Label lblMensagemErro;
 
 	@FXML
 	private Label lblErrorName;
@@ -140,10 +143,53 @@ public class SellerFormController implements Initializable {
 
 			exception.addError("name", "Campo nao pode estar vazio"); // Adiciona a excecao no Map de errors.
 
+		} else {
+
+			obj.setName(txtFieldName.getText());
+
 		}
 
-		obj.setName(txtFieldName.getText());
+		if (txtFieldEmail.getText() == null || txtFieldEmail.getText().trim().equals(" ")) {
 
+			exception.addError("email", "Campo nao pode estar vazio"); // Adiciona a excecao no Map de errors.
+
+		} else {
+
+			obj.setEmail(txtFieldEmail.getText());
+
+		}
+
+//		 Pegando a data/valor que esta no DatePicker
+//
+//		 Variavel instant independe da localidade do usuário. Ja o
+//		 atStartOfDay(ZoneId.systemDefault())); converte a data
+
+		if (dpBirthDate.getValue() == null) {
+			// "brithDate" refere-se ao campo
+
+			exception.addError("birthDate", "Data de aniversário não pode ser nula ");
+
+		} else {
+
+			Instant instant = Instant.from(dpBirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+
+			obj.setBirthDate(Date.from(instant)); // Converte pro formato Date
+
+		}
+
+		if (txtFieldBaseSalay.getText() == null || txtFieldBaseSalay.getText().trim().equals("")) {
+
+			// baseSalary chave do MAP
+			exception.addError("baseSalary", "Campo nao pode estar vazio"); // Adiciona a excecao no Map de errors.
+
+		} else {
+
+			obj.setBaseSalary(Utils.parseDouble(txtFieldBaseSalay.getText()));
+
+		}
+		
+		obj.setDepartment(comboDepartments.getValue());
+		
 		if (exception.getErrors().size() > 0) {
 
 			throw exception;
@@ -220,14 +266,65 @@ public class SellerFormController implements Initializable {
 
 	}
 
+	// Seta as mensagem de erro em cada label do campo
+
 	private void setErrorMessage(Map<String, String> errors) {
 
 		Set<String> fields = errors.keySet(); // Cria um set com as mensages de erro do Map
-
+		
+		
+//		/Subsituido por operador Ternario Condicional
+/*
+ * 
+ * 
 		if (fields.contains("name")) { // Verifica se existe a chave no Map
 
-			lblMensagemErro.setText(errors.get("name")); // Seta a mensagem de erro no label.
+			lblErrorName.setText(errors.get("name")); // Seta a mensagem de erro no label.
+		} else {
+
+			lblErrorName.setText(" ");
+//		}
+ * 
+ * **/
+ 
+		
+		
+		// Pode-se trocar o IF por operador condicional TERNARIO, pra reduzir o código.
+		
+		lblErrorName.setText(fields.contains("name")? errors.get("name"): ""); // ? equivale a então e : senão
+		lblErrorEmail.setText(fields.contains("email")? errors.get("email"): "");
+		lblErrorBithDate.setText(fields.contains("birthDate")? errors.get("birthDate"): "");
+		lblErrorBaseSalary.setText(fields.contains("baseSalary")? errors.get("baseSalary"): "");
+		
+	/* 	
+
+		Substituido por condição Ternaria acima. Reduzindo o código.
+		
+		if (fields.contains("email")) { // Verifica se existe a chave no Map
+
+			lblErrorEmail.setText(errors.get("email")); // Seta a mensagem de erro no label.
+		} else {
+
+			lblErrorEmail.setText(" ");
 		}
+
+		if (fields.contains("baseSalary")) { // Verifica se existe a chave no Map
+
+			lblErrorBaseSalary.setText(errors.get("baseSalary")); // Seta a mensagem de erro no label.
+		} else {
+
+			lblErrorBaseSalary.setText(" ");
+		}
+
+		if (fields.contains("birthDate")) { // Verifica se existe a chave no Map birthDate
+
+			lblErrorBithDate.setText(errors.get("birthDate")); // Seta a mensagem de erro no label.
+		} else {
+
+			lblErrorBithDate.setText("");
+		}
+		
+		**/
 
 	}
 
